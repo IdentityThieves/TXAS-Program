@@ -6,6 +6,7 @@ info_dir = fr"C:\\Users\\{os_user}\\Documents\\_TXAS Program Info"
 price_list = fr"C:\\Users\\{os_user}\\Documents\\_TXAS Program Info\\prices.txt"
 orders_dir = fr"C:\\Users\\{os_user}\\Documents\\_TXAS Orders"
 temp_dir= fr"C:\\Users\\{os_user}\\Documents\\_TXAS Program Info\\temp"
+discount_list = fr"C:\\Users\\{os_user}\\Documents\\_TXAS Program Info\\discounts.txt"
 
 def lb():
     print("")
@@ -58,6 +59,13 @@ def download_icons_files():
         with open(price_list, "w") as f:
             f.write(f"1,cleaves,190,Cocaine Leaves\n2,cpowder,216,Cocaine Powder\n3,cbags,260,Cocaine Bags")
 
+    try:
+        with open(discount_list, "r") as f:
+            f.read()
+    except:
+        with open(discount_list, "w") as f:
+            f.write(f"1")
+
     icon_url = "https://cdn.discordapp.com/attachments/1456614658416050362/1456672521779941437/TXAS_Program_Icon.ico?ex=695bda80&is=695a8900&hm=3c476807d9eeccae830dcd4c18b9d1bbadbc3813dc591a9a6fb136fabb0f6412&"
     download_icon_check(icon_url, "TXAS Program Icon.ico")
 
@@ -69,7 +77,7 @@ def download_icons_files():
 def change_prices_txt():
     cptxtcontinue = 0
     while cptxtcontinue != 1:
-        selection = s("What do you want to do?\n [1] Add item\n [2] Remove an item\n [3] Modify item info\n [4] View price list\n [5] Go back")
+        selection = s("What do you want to do?\n [1] Add item\n [2] Remove an item\n [3] Modify item info\n [4] View price list\n [5] Change discount\n [6] Go back")
         match selection:
             case 1:
                 selection_no = "0"
@@ -177,5 +185,20 @@ def change_prices_txt():
                     print(f" [{i[0]}] {i[1]} {i[2]} {i[3]}")
                 lb()
             case 5:
+                with open(discount_list, "r") as f:
+                    lower_discount = f.readline()
+                print("Current lower discount for over 1000 units:")
+                print(f"{lower_discount}")
+                lb()
+                selection = s("What would you like to do?")
+                print("[1] Change lowered discount\n [2] Go back")
+                match selection:
+                    case 1:
+                        new_discount = s("What would you like to change it to? [input of 5 is 5%]")
+                        with open(discount_list, "w") as f:
+                            print("New discount has been set to {new_discount}%")
+                            new_discount = 1 - (new_discount / 100)
+                            f.write(new_discount)
+            case 6:
                 cptxtcontinue = 1
                 return None

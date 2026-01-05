@@ -6,10 +6,13 @@ from barcode.writer import ImageWriter
 from functions import lb, q, s
 
 os_user = os.getlogin()
+
 info_dir = fr"C:\\Users\\{os_user}\\Documents\\_TXAS Program Info"
-price_list = fr"C:\\Users\\{os_user}\\Documents\\_TXAS Program Info\\prices.txt"
 orders_dir = fr"C:\\Users\\{os_user}\\Documents\\_TXAS Orders"
 temp_dir= fr"C:\\Users\\{os_user}\\Documents\\_TXAS Program Info\\temp"
+
+price_list = fr"C:\\Users\\{os_user}\\Documents\\_TXAS Program Info\\prices.txt"
+discount_list = fr"C:\\Users\\{os_user}\\Documents\\_TXAS Program Info\\discounts.txt"
 
 def order_num():
     od = random.choices("1234567890", k=5)
@@ -24,8 +27,6 @@ def order():
     l2 = []
     item_price_list = []
     item_count_list = []
-    discount_total = []
-    already_ordered_items = []
     continueordering = 0
     total_price = 0
     total_price_wd = 0
@@ -51,15 +52,6 @@ def order():
                 print("Invalid selection. Please try again.")
                 lb()
         order_count = s("How many do you want to order?")
-        discount = 1
-        if selected_product not in already_ordered_items:
-            already_ordered_items.append(selected_product)
-            if order_count >= 1000:
-                discount = 0.95
-            if order_count < 1000:
-                discount = 1
-        
-        discount_total.append(discount)
         order = f"{selected_product},{order_count}"
         l2.append(order.split(","))
         price_for_item = f"{l1[order_item-1][2]}"
@@ -71,10 +63,10 @@ def order():
         item_count_list.append(order_count)
 
         while True:
-            continueq = q("Do you want to add to the order?")
-            if continueq.lower() == "yes":
+            continueq = q("Do you want to add to the order? [Y/N]")
+            if continueq.lower() == "y":
                 break
-            elif continueq.lower() == "no":
+            elif continueq.lower() == "n":
                 continueordering = 1
                 break
             else:
@@ -121,6 +113,14 @@ def order():
     for i in item_price_list:
         item_price_list_str.append(f"{round(i):,}".replace(",", " "))
     item_price_list = item_price_list_str
+
+    with open(discount_list, "r") as f:
+        lower_discount = int(f.readline())
+
+    discount_total = []
+    for i in item_count_list:
+        if i > 1000:
+            discount_total.append(lower_discount)
 
     discount = 1
     for i in discount_total:
