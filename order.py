@@ -115,7 +115,7 @@ def order():
     item_price_list = item_price_list_str
 
     with open(discount_list, "r") as f:
-        lower_discount = int(f.readline())
+        lower_discount = float(f.readline())
 
     discount_total = []
     for i in item_count_list:
@@ -159,8 +159,8 @@ def order():
         draw.text((width//2 - text_width//2, y), text, fill=text_color, font=font)
 
     #logo path
-    logo_path = r"C:\Users\m1inty\Documents\_TXAS Program Info\TXAS Program Icon.png"
-    bardcode_path = r"C:\Users\m1inty\Documents\_TXAS Program Info\Barcode.png"
+    logo_path = fr"C:\Users\{os_user}\Documents\_TXAS Program Info\TXAS Program Icon.png"
+    bardcode_path = fr"C:\Users\{os_user}\Documents\_TXAS Program Info\Barcode.png"
 
     # Fonts - small and receipt-like
     try:

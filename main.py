@@ -3,15 +3,12 @@ from functions import s, q, change_prices_txt, lb,download_icons_files
 download_icons_files()
 
 from order import order
-import time
-import requests
-import sys
-import subprocess
+import time, requests, sys, subprocess
 from pathlib import Path
 
 REPO_OWNER = "IdentityThieves"
 REPO_NAME = "TXAS-Program"
-CURRENT_VERSION = "1.1.0"  # Hardcode your app's version (update this per release)
+CURRENT_VERSION = "1.2.0"  # Hardcode your app's version (update this per release)
 ASSET_NAME_PATTERN = "TXAS.exe"  # Name or pattern of the asset to download (e.g., contains "windows")
 
 def main():
@@ -125,13 +122,13 @@ def check_and_update():
     clean_remote = remote_version.lstrip('v')
 
     if not version_higher(remote_version, CURRENT_VERSION):
-        print(f"You are up to date! (v{CURRENT_VERSION})")
+        print(f"You are up to date! (v{CURRENT_VERSION})\n")
         return
 
     print(f"New version available: {remote_version} (current: v{CURRENT_VERSION})")
-    choice = input("Update now? (y/n): ").strip().lower()
+    choice = input("Update now? (Y/N): ").strip().lower()
     if choice != 'y':
-        print("Update skipped.")
+        print("Update skipped.\n")
         return
 
     asset = find_asset(release['assets'])
@@ -176,12 +173,12 @@ def check_and_update():
 # Run at the very start of your script
 if __name__ == "__main__":
     check_and_update()
-    while True:
-        try:
-            main()
-            break
-        except:
-            print("Ran into unexpected error. Restarting...\n")
+    #while True:
+        #try:
+    main()
+            #break
+        #except:
+            #print("Ran into unexpected error. Restarting...\n")
 
 print("Thank you for using TXAS certified software.")
 lb()

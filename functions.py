@@ -69,7 +69,7 @@ def download_icons_files():
     icon_url = "https://cdn.discordapp.com/attachments/1456614658416050362/1456672521779941437/TXAS_Program_Icon.ico?ex=695bda80&is=695a8900&hm=3c476807d9eeccae830dcd4c18b9d1bbadbc3813dc591a9a6fb136fabb0f6412&"
     download_icon_check(icon_url, "TXAS Program Icon.ico")
 
-    icon_url = "https://cdn.discordapp.com/attachments/1456614658416050362/1457123922578509824/TXAS_Program_Icon.png?ex=695c2d67&is=695adbe7&hm=b61c957df8b2295d1081d30707ba25996fc16af03bd0dbe1bb0ca3755a415dc1&"
+    icon_url = "https://media.discordapp.net/attachments/1456614658416050362/1457123922578509824/TXAS_Program_Icon.png?ex=695c2d67&is=695adbe7&hm=b61c957df8b2295d1081d30707ba25996fc16af03bd0dbe1bb0ca3755a415dc1&=&format=webp&quality=lossless"
     download_icon_check(icon_url, "TXAS Program Icon.png")
 
     
@@ -190,15 +190,15 @@ def change_prices_txt():
                 print("Current lower discount for over 1000 units:")
                 print(f"{lower_discount}")
                 lb()
+                print(" [1] Change lowered discount\n [2] Go back")
                 selection = s("What would you like to do?")
-                print("[1] Change lowered discount\n [2] Go back")
                 match selection:
                     case 1:
                         new_discount = s("What would you like to change it to? [input of 5 is 5%]")
                         with open(discount_list, "w") as f:
-                            print("New discount has been set to {new_discount}%")
+                            print(f"New discount has been set to {new_discount}%")
                             new_discount = 1 - (new_discount / 100)
-                            f.write(new_discount)
+                            f.write(f"{new_discount}")
             case 6:
                 cptxtcontinue = 1
                 return None
