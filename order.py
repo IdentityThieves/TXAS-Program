@@ -13,6 +13,7 @@ temp_dir= fr"C:\\Users\\{os_user}\\Documents\\_TXAS Program Info\\temp"
 
 price_list = fr"C:\\Users\\{os_user}\\Documents\\_TXAS Program Info\\prices.txt"
 discount_list = fr"C:\\Users\\{os_user}\\Documents\\_TXAS Program Info\\discounts.txt"
+clients_list = fr"C:\\Users\\{os_user}\\Documents\\_TXAS Program Info\\clients.txt"
 
 def order_num():
     od = random.choices("1234567890", k=5)
@@ -22,8 +23,34 @@ def order_num():
     return odstr
 
 def order():
+    with open(clients_list, "r") as f:
+        customer_info = []
+        for line in f:
+            customer_info.append(line.split(","))
+
     name = q("What is the customers name?")
-    phone_number = q("What is the customers phone number?")
+    phone_number = "null"
+    for i in customer_info:
+        try:
+            if i[0] == name:
+                phone_number = i[1]
+                print(f"Found number on file for {name}\n{phone_number}")
+                break
+        except:
+            break
+    if phone_number == "null":
+        phone_number = q("What is the customers phone number?")
+        customer_info.append(f"{name},{phone_number}")
+        with open(clients_list, "w") as f:
+            wtf = ""
+            j = 1
+            for i in customer_info:
+                wtf += f"{i}"
+                if j < len(customer_info):
+                    wtf += "\n"
+                j += 1
+            f.write(wtf)
+    
     l2 = []
     item_price_list = []
     item_count_list = []
@@ -63,7 +90,7 @@ def order():
         item_count_list.append(order_count)
 
         while True:
-            continueq = q("Do you want to add to the order? [Y/N]")
+            continueq = q("Do you want to add to the order? [Y / N]")
             if continueq.lower() == "y":
                 break
             elif continueq.lower() == "n":
@@ -160,7 +187,6 @@ def order():
 
     #logo path
     logo_path = fr"C:\Users\{os_user}\Documents\_TXAS Program Info\TXAS Program Icon.png"
-    bardcode_path = fr"C:\Users\{os_user}\Documents\_TXAS Program Info\Barcode.png"
 
     # Fonts - small and receipt-like
     try:

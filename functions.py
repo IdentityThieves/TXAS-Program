@@ -3,10 +3,12 @@ import os, requests
 os_user = os.getlogin()
 
 info_dir = fr"C:\\Users\\{os_user}\\Documents\\_TXAS Program Info"
-price_list = fr"C:\\Users\\{os_user}\\Documents\\_TXAS Program Info\\prices.txt"
 orders_dir = fr"C:\\Users\\{os_user}\\Documents\\_TXAS Orders"
 temp_dir= fr"C:\\Users\\{os_user}\\Documents\\_TXAS Program Info\\temp"
+
 discount_list = fr"C:\\Users\\{os_user}\\Documents\\_TXAS Program Info\\discounts.txt"
+price_list = fr"C:\\Users\\{os_user}\\Documents\\_TXAS Program Info\\prices.txt"
+clients_list = fr"C:\\Users\\{os_user}\\Documents\\_TXAS Program Info\\clients.txt"
 
 def lb():
     print("")
@@ -65,14 +67,19 @@ def download_icons_files():
     except:
         with open(discount_list, "w") as f:
             f.write(f"1")
+    
+    try:
+        with open(clients_list, "x") as f:
+            f.write("")
+    except FileExistsError:
+        with open(clients_list, "r") as f:
+            f.read()
 
     icon_url = "https://cdn.discordapp.com/attachments/1456614658416050362/1456672521779941437/TXAS_Program_Icon.ico?ex=695bda80&is=695a8900&hm=3c476807d9eeccae830dcd4c18b9d1bbadbc3813dc591a9a6fb136fabb0f6412&"
     download_icon_check(icon_url, "TXAS Program Icon.ico")
 
     icon_url = "https://media.discordapp.net/attachments/1456614658416050362/1457123922578509824/TXAS_Program_Icon.png?ex=695c2d67&is=695adbe7&hm=b61c957df8b2295d1081d30707ba25996fc16af03bd0dbe1bb0ca3755a415dc1&=&format=webp&quality=lossless"
     download_icon_check(icon_url, "TXAS Program Icon.png")
-
-    
 
 def change_prices_txt():
     cptxtcontinue = 0
@@ -187,8 +194,8 @@ def change_prices_txt():
             case 5:
                 with open(discount_list, "r") as f:
                     lower_discount = f.readline()
-                print("Current lower discount for over 1000 units:")
-                print(f"{lower_discount}")
+                print("Current lowered discount for over 1000 units:")
+                print(f"{(1-lower_discount)*100}%")
                 lb()
                 print(" [1] Change lowered discount\n [2] Go back")
                 selection = s("What would you like to do?")
@@ -201,4 +208,73 @@ def change_prices_txt():
                             f.write(f"{new_discount}")
             case 6:
                 cptxtcontinue = 1
-                return None
+                return
+            
+def file_customer():
+    with open(clients_list, "r") as f:
+        customer_info = []
+        for line in f:
+            customer_info.append(line.split(","))
+
+    name = q("What is the customers name?")
+    for i in customer_info:
+        if f"{i[0]}".lower() == name.lower():
+            print(f"Customer already on file:\n  Name: {i[0]}\n  Phone Number: {i[1]}")
+            continueic = 0
+            while continueic != 1:
+                correct_info = q("Is this information correct? [Y / N]").lower()
+                if correct_info == "y":
+                    return
+                elif correct_info == "n":
+                    phone_number = q("What is the customers phone number?")
+                    i[1] = phone_number
+                    with open(clients_list, "w") as f:
+                        wtf = ""
+                        j = 1
+                        for i in customer_info:
+                            wtf += f"{i[0]},{i[1]}"
+                            if j < len(customer_info):
+                                wtf += "\n"
+                            j += 1
+                        f.write(wtf)
+                        print("Customer successfully modified.\n")
+                    return
+                else:
+                    print('Please type "Y" or "N"\n')
+    phone_number = q("What is the customers phone number?")
+    customer_info.append(f"{name},{phone_number}")
+    with open(clients_list, "w") as f:
+        wtf = ""
+        j = 1
+        for i in customer_info:
+            wtf += f"{i}"
+            if j < len(customer_info):
+                wtf += "\n"
+            j += 1
+        f.write(wtf)
+        print("Customer successfully filed.")
+
+def view_customer_info():
+    with open(clients_list, "r") as f:
+        customer_info = []
+        for line in f:
+            customer_info.append(line.replace("\n", "").split(","))
+    
+    j = 1
+    for i in customer_info:
+        print(f"[{j}] Name: {i[0]}\n    Phone Number: {i[1]}")
+        j += 1
+    lb()
+
+def customer_info():
+    cicontinue = 0
+    while cicontinue != 1:
+        selection = s("What would you like to do?\n [1] View customer info\n [2] File / Modify customer\n [3] Go back")
+        match selection:
+            case 1:
+                view_customer_info()
+            case 2:
+                file_customer()
+            case 3:
+                cicontinue = 1
+                return
